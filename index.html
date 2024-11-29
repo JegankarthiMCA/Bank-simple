@@ -1,0 +1,375 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deposit & Withdraw with Transactions</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      input {
+        padding: 10px;
+        width: 80%;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .balance {
+        margin: 20px 0;
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+      .error {
+        color: red;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Bank Transactions</h1>
+      <div class="balance">Current Balance: $<span id="balance">0</span></div>
+
+      <input type="number" id="amount" placeholder="Enter amount" />
+      <br />
+
+      <button onclick="deposit()">Deposit</button>
+      <button onclick="withdraw()">Withdraw</button>
+      <div id="error" class="error"></div>
+
+      <h2>Transaction History</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Updated Balance</th>
+          </tr>
+        </thead>
+        <tbody id="transaction-history">
+          <tr>
+            <td colspan="4">No transactions yet</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      let balance = 0; // Initial balance
+      let transactionCount = 0; // Counter for transaction history
+
+      function deposit() {
+        const amount = parseFloat(document.getElementById("amount").value);
+        const error = document.getElementById("error");
+        error.textContent = ""; // Clear error message
+
+        if (isNaN(amount) || amount <= 0) {
+          error.textContent = "Please enter a valid amount to deposit.";
+          return;
+        }
+
+        balance += amount;
+        updateBalance();
+        addTransaction("Deposit", amount);
+        document.getElementById("amount").value = ""; // Clear input field
+      }
+
+      function withdraw() {
+        const amount = parseFloat(document.getElementById("amount").value);
+        const error = document.getElementById("error");
+        error.textContent = ""; // Clear error message
+
+        if (isNaN(amount) || amount <= 0) {
+          error.textContent = "Please enter a valid amount to withdraw.";
+          return;
+        }
+
+        if (amount > balance) {
+          error.textContent = "Insufficient funds!";
+          return;
+        }
+
+        balance -= amount;
+        updateBalance();
+        addTransaction("Withdraw", amount);
+        document.getElementById("amount").value = ""; // Clear input field
+      }
+
+      function updateBalance() {
+        document.getElementById("balance").textContent = balance.toFixed(2);
+      }
+
+      function addTransaction(type, amount) {
+        const transactionHistory = document.getElementById(
+          "transaction-history"
+        );
+
+        // Remove "No transactions yet" row if present
+        if (transactionCount === 0) {
+          transactionHistory.innerHTML = "";
+        }
+
+        transactionCount++;
+
+        // Add a new transaction row
+        const row = `
+        <tr>
+          <td>${transactionCount}</td>
+          <td>${type}</td>
+          <td>$${amount.toFixed(2)}</td>
+          <td>$${balance.toFixed(2)}</td>
+        </tr>
+      `;
+        transactionHistory.innerHTML += row;
+      }
+    </script>
+  </body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multi-User Bank Transactions</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: antiquewhite;
+        margin: 20px;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+        background-color: grey;
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      input {
+        padding: 10px;
+        width: 80%;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .error {
+        color: red;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Multi-User Bank Transactions</h1>
+
+      <input type="text" id="user-name" placeholder="Your Name" />
+      <br />
+
+      <input type="number" id="amount" placeholder="Enter Amount" />
+      <br />
+
+      <button onclick="deposit()">Deposit</button>
+      <button onclick="withdraw()">Withdraw</button>
+      <div id="error" class="error"></div>
+
+      <h2>Main Balances</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>User Name</th>
+            <th>Main Balance</th>
+          </tr>
+        </thead>
+        <tbody id="main-balance">
+          <tr>
+            <td colspan="2">No users yet</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Transaction History</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>User Name</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Updated Balance</th>
+          </tr>
+        </thead>
+        <tbody id="transaction-history">
+          <tr>
+            <td colspan="5">No transactions yet</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      const userBalances = {}; // Tracks balances for each user
+      let transactionCount = 0; // Counter for transaction history
+
+      function deposit() {
+        const userName = document.getElementById("user-name").value.trim();
+        const amount = parseFloat(document.getElementById("amount").value);
+        const error = document.getElementById("error");
+        error.textContent = ""; // Clear error message
+
+        if (!userName) {
+          error.textContent = "Please enter your name.";
+          return;
+        }
+
+        if (isNaN(amount) || amount <= 0) {
+          error.textContent = "Please enter a valid amount to deposit.";
+          return;
+        }
+
+        // Initialize balance for new user if not present
+        if (!userBalances[userName]) {
+          userBalances[userName] = 0;
+          updateMainBalances(); // Update the main balance table
+        }
+
+        // Update user balance
+        userBalances[userName] += amount;
+        updateMainBalances(); // Update the main balance table
+        addTransaction(userName, "Deposit", amount);
+        document.getElementById("amount").value = ""; // Clear input field
+      }
+
+      function withdraw() {
+        const userName = document.getElementById("user-name").value.trim();
+        const amount = parseFloat(document.getElementById("amount").value);
+        const error = document.getElementById("error");
+        error.textContent = ""; // Clear error message
+
+        if (!userName) {
+          error.textContent = "Please enter your name.";
+          return;
+        }
+
+        if (isNaN(amount) || amount <= 0) {
+          error.textContent = "Please enter a valid amount to withdraw.";
+          return;
+        }
+
+        if (!userBalances[userName] || userBalances[userName] < amount) {
+          error.textContent = "Insufficient funds!";
+          return;
+        }
+
+        // Update user balance
+        userBalances[userName] -= amount;
+        updateMainBalances(); // Update the main balance table
+        addTransaction(userName, "Withdraw", amount);
+        document.getElementById("amount").value = ""; // Clear input field
+      }
+
+      function updateMainBalances() {
+        const mainBalanceTable = document.getElementById("main-balance");
+        mainBalanceTable.innerHTML = ""; // Clear the table
+
+        for (const user in userBalances) {
+          const row = `
+          <tr>
+            <td>${user}</td>
+            <td>₹${userBalances[user].toFixed(2)}</td>
+          </tr>
+        `;
+          mainBalanceTable.innerHTML += row;
+        }
+      }
+
+      function addTransaction(userName, type, amount) {
+        const transactionHistory = document.getElementById(
+          "transaction-history"
+        );
+
+        // Remove "No transactions yet" row if present
+        if (transactionCount === 0) {
+          transactionHistory.innerHTML = "";
+        }
+
+        transactionCount++;
+
+        // Add a new transaction row
+        const row = `
+        <tr>
+          <td>${transactionCount}</td>
+          <td>${userName}</td>
+          <td>${type}</td>
+          <td>₹${amount.toFixed(2)}</td>
+          <td>₹${userBalances[userName].toFixed(2)}</td>
+        </tr>
+      `;
+        transactionHistory.innerHTML += row;
+      }
+    </script>
+  </body>
+</html>
